@@ -1,33 +1,45 @@
-<?php
-	require_once "lib/mercadopago.php";
-	$mp = new MP(client_id, client_secret);
+<?php 
+  session_start();
+  include_once("lib/configs.php");
+  require_once "lib/mercadopago.php";
+?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Bootstrap CSS -->
+    <base href="<?php echo url_site;?>">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css"/>
 
-	$preference_data = array(
-	"items" => array(
-	  array(
-	    "payer_email" => $email,
-	    "back_url" => url_site,
-	      "title" => mb_convert_encoding("#FATURA ".titulo_site, "UTF-8", "auto"),
-	      "currency_id" => "BRL",
-	      "category_id" => "Serviços",
-	      "quantity" => 1,
-	      "unit_price" => floatval(number_format((float)str_replace(",",".",$valor), 2, '.', '')
-	    ))),
+    <title><?php echo titulo_site;?></title>
+  </head>
+  <body>
 
-	      "payer" => array(
-	      "name" => $nome,
-	      "surname" => $sobrenome,
-	      "email" => $email
-	 	 ),
-		"back_urls" => array(
-			"success" => url_site."status/success/",
-			"failure" => url_site."status/failure/",
-			"pending" => url_site."status/pending/"
-		));
-	$preference = $mp->create_preference($preference_data);
-	?>
+  <div id="content-all">
+    <div class="row">
+      <?php
+        $url = (isset($_GET['pagina'])) ? $_GET['pagina'] : 'inicio';
+        $explode = explode('/', $url);
+        $dir = "pags/";
+        $ext = ".php";
+        if(file_exists($dir.$explode['0'].$ext)){
+          include($dir.$explode['0'].$ext);
+        }else{
+          echo "<div class='col-sm-5 offset-md-3 alert alert-danger'>Página não encontrada!</div>";
+        }
+      ?>
+    </div>
+  </div>
 
-	<h4>Pagar agora com MercadoPago:</h4>
-    <a target="_blank" href="<?php echo $preference["response"]["init_point"];?>" name="MP-Checkout" class="orange-ar-m-sq-arall"><img src="images/mercadopagolarge.png"/ width="400" class="img-fluid"></a>
-    <script type="text/javascript" src="//resources.mlstatic.com/mptools/render.js"></script>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>

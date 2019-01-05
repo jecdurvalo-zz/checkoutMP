@@ -1,12 +1,12 @@
 <?php
 	$_SESSION['nome'] = $_POST['nome'];
-	
 	$_SESSION['sobrenome'] = $_POST['sobrenome'];
 	$_SESSION['email'] = $_POST['email'];
 	$_SESSION['telefone'] = $_POST['telefone'];
 	$_SESSION['valor'] = number_format($_POST['valor'], 2,',', '.');
 
 	$mp = new MP(client_id, client_secret);
+
 	$preference_data = array(
 	"items" => array(
 	  array(
@@ -18,7 +18,6 @@
 	      "quantity" => 1,
 	      "unit_price" => floatval(number_format((float)str_replace(",",".",$_SESSION['valor']), 2, '.', '')
 	    ))),
-
 	      "payer" => array(
 	      "name" => $_SESSION['nome'],
 	      "surname" => $_SESSION['sobrenome'],
@@ -29,8 +28,10 @@
 			"failure" => url_site."status/failure/",
 			"pending" => url_site."status/pending/"
 		));
+		
 	$preference = $mp->create_preference($preference_data);
 ?>
+
 <div class="col-sm-8 offset-md-2">
 	<h4 align="center">Pedido efetuado com sucesso!</h4><br>
 
